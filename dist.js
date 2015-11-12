@@ -20025,36 +20025,22 @@
 	  return new Point2D(x, y);
 	};
 
-	var Canvas = React.createClass({
-	  displayName: 'Canvas',
-
-	  render: function render() {
-	    return React.createElement('div', { className: 'p4', __source: {
-	        fileName: '../../../canvas.react.js',
-	        lineNumber: 32
-	      }
-	    }, React.createElement('h1', { className: 'mt2', __source: {
-	        fileName: '../../../canvas.react.js',
-	        lineNumber: 33
-	      }
-	    }, 'Canvas'), React.createElement('canvas', { ref: 'canvas', className: 'border',
-	      onClick: this.handleClick, __source: {
-	        fileName: '../../../canvas.react.js',
-	        lineNumber: 34
-	      }
-	    }), React.createElement(StatusBar, {
-	      __source: {
-	        fileName: '../../../canvas.react.js',
-	        lineNumber: 36
-	      }
-	    }));
-	  },
+	var PixelGrid = React.createClass({
+	  displayName: 'PixelGrid',
 
 	  componentDidMount: function componentDidMount() {
 	    var canvas = ReactDOM.findDOMNode(this.refs.canvas);
 	    var ctx = canvas.getContext("2d");
 	    ctx.fillStyle = "green";
 	    ctx.fillRect(10, 10, 100, 100);
+	  },
+
+	  render: function render() {
+	    return React.createElement('canvas', { ref: 'canvas', className: 'border', onClick: this.handleClick, __source: {
+	        fileName: '../../../canvas.react.js',
+	        lineNumber: 38
+	      }
+	    });
 	  },
 
 	  handleClick: function handleClick(event) {
@@ -20064,6 +20050,33 @@
 	  getClickLocation: function getClickLocation(event) {
 	    return GetPoint2DFromCanvasClickEvent(event);
 	  }
+	});
+
+	var Canvas = React.createClass({
+	  displayName: 'Canvas',
+
+	  render: function render() {
+	    return React.createElement('div', { className: 'p4', __source: {
+	        fileName: '../../../canvas.react.js',
+	        lineNumber: 55
+	      }
+	    }, React.createElement('h1', { className: 'mt2', __source: {
+	        fileName: '../../../canvas.react.js',
+	        lineNumber: 56
+	      }
+	    }, 'Canvas'), React.createElement(PixelGrid, {
+	      __source: {
+	        fileName: '../../../canvas.react.js',
+	        lineNumber: 57
+	      }
+	    }), React.createElement(StatusBar, {
+	      __source: {
+	        fileName: '../../../canvas.react.js',
+	        lineNumber: 58
+	      }
+	    }));
+	  }
+
 	});
 
 	module.exports = Canvas;
