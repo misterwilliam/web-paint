@@ -20002,10 +20002,28 @@
 
 	'use strict';
 
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
 	var React = __webpack_require__(1);
 	var ReactDOM = __webpack_require__(158);
 
 	var StatusBar = __webpack_require__(163);
+
+	var Point2D = function Point2D(x, y) {
+	  _classCallCheck(this, Point2D);
+
+	  this.x = x;
+	  this.y = y;
+	};
+
+	var GetPoint2DFromCanvasClickEvent = function GetPoint2DFromCanvasClickEvent(event) {
+	  var canvas = event.target;
+	  // $FlowIgnore
+	  var x = event.pageX - canvas.offsetLeft;
+	  // $FlowIgnore
+	  var y = event.pageY - canvas.offsetTop;
+	  return new Point2D(x, y);
+	};
 
 	var Canvas = React.createClass({
 	  displayName: 'Canvas',
@@ -20013,20 +20031,21 @@
 	  render: function render() {
 	    return React.createElement('div', { className: 'p4', __source: {
 	        fileName: '../../../canvas.react.js',
-	        lineNumber: 11
+	        lineNumber: 32
 	      }
 	    }, React.createElement('h1', { className: 'mt2', __source: {
 	        fileName: '../../../canvas.react.js',
-	        lineNumber: 12
+	        lineNumber: 33
 	      }
-	    }, 'Canvas'), React.createElement('canvas', { ref: 'canvas', className: 'border', __source: {
+	    }, 'Canvas'), React.createElement('canvas', { ref: 'canvas', className: 'border',
+	      onClick: this.handleClick, __source: {
 	        fileName: '../../../canvas.react.js',
-	        lineNumber: 13
+	        lineNumber: 34
 	      }
 	    }), React.createElement(StatusBar, {
 	      __source: {
 	        fileName: '../../../canvas.react.js',
-	        lineNumber: 14
+	        lineNumber: 36
 	      }
 	    }));
 	  },
@@ -20036,6 +20055,14 @@
 	    var ctx = canvas.getContext("2d");
 	    ctx.fillStyle = "green";
 	    ctx.fillRect(10, 10, 100, 100);
+	  },
+
+	  handleClick: function handleClick(event) {
+	    console.log(this.getClickLocation(event));
+	  },
+
+	  getClickLocation: function getClickLocation(event) {
+	    return GetPoint2DFromCanvasClickEvent(event);
 	  }
 	});
 
