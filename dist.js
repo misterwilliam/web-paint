@@ -46,37 +46,73 @@
 
 	'use strict';
 
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
 	var React = __webpack_require__(1);
 	var ReactDOM = __webpack_require__(158);
 
-	// Demonstrate usage of es2015 feature with a flow feature.
-
-	var ExampleClass = function ExampleClass() {
-	  _classCallCheck(this, ExampleClass);
-
-	  this.data = "data";
-	};
-
-	var exampleClass = new ExampleClass();
-
-	var Foo = React.createClass({
-	  displayName: 'Foo',
+	var ToolBar = React.createClass({
+	  displayName: 'ToolBar',
 
 	  render: function render() {
 	    return React.createElement('div', {
 	      __source: {
 	        fileName: '../../../index.js',
-	        lineNumber: 18
+	        lineNumber: 9
 	      }
-	    }, this.props.message);
+	    }, 'Toolbar', React.createElement('div', { className: 'button', __source: {
+	        fileName: '../../../index.js',
+	        lineNumber: 11
+	      }
+	    }, 'Paintbrush'), React.createElement('div', { className: 'button', __source: {
+	        fileName: '../../../index.js',
+	        lineNumber: 14
+	      }
+	    }, 'Rectangle'), React.createElement('div', { className: 'button', __source: {
+	        fileName: '../../../index.js',
+	        lineNumber: 17
+	      }
+	    }, 'Floodfill'));
 	  }
 	});
 
-	ReactDOM.render(React.createElement(Foo, { message: exampleClass.data, __source: {
+	var Canvas = React.createClass({
+	  displayName: 'Canvas',
+
+	  render: function render() {
+	    return React.createElement('div', {
+	      __source: {
+	        fileName: '../../../index.js',
+	        lineNumber: 28
+	      }
+	    }, 'Canvas');
+	  }
+	});
+
+	var App = React.createClass({
+	  displayName: 'App',
+
+	  render: function render() {
+	    return React.createElement('div', { className: 'border flex', __source: {
+	        fileName: '../../../index.js',
+	        lineNumber: 38
+	      }
+	    }, React.createElement(ToolBar, {
+	      __source: {
+	        fileName: '../../../index.js',
+	        lineNumber: 39
+	      }
+	    }), React.createElement(Canvas, {
+	      __source: {
+	        fileName: '../../../index.js',
+	        lineNumber: 40
+	      }
+	    }));
+	  }
+	});
+
+	ReactDOM.render(React.createElement(App, {
+	  __source: {
 	    fileName: '../../../index.js',
-	    lineNumber: 26
+	    lineNumber: 47
 	  }
 	}), document.getElementById('react-container'));
 

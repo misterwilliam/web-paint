@@ -3,26 +3,46 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
 
-// Demonstrate usage of es2015 feature with a flow feature.
-class ExampleClass {
-  data: string;
-  constructor() {
-    this.data = "data";
-  }
-}
-var exampleClass = new ExampleClass();
-
-var Foo = React.createClass({
+var ToolBar = React.createClass({
   render: function() {
     return (
       <div>
-        {this.props.message}
+        Toolbar
+        <div className="button">
+          Paintbrush
+        </div>
+        <div className="button">
+          Rectangle
+        </div>
+        <div className="button">
+          Floodfill
+        </div>
+      </div>
+    )
+  }
+})
+
+var Canvas = React.createClass({
+  render: function() {
+    return (
+      <div>
+        Canvas
+      </div>
+    )
+  }
+})
+
+var App = React.createClass({
+  render: function() {
+    return (
+      <div className="border flex">
+        <ToolBar />
+        <Canvas />
       </div>
     )
   }
 });
 
 ReactDOM.render(
-  <Foo message={exampleClass.data} />,
-  document.getElementById('react-container')
+  <App />, document.getElementById('react-container')
 );
