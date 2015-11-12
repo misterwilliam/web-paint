@@ -1,0 +1,19 @@
+{
+  "name": "web-paint",
+  "version": "1.0.0",
+  "description": "\"Canvas based implementation of a simple paint program\"",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/misterwilliam/web-paint.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/misterwilliam/web-paint/issues"
+  },
+  "homepage": "https://github.com/misterwilliam/web-paint#readme"
+}
