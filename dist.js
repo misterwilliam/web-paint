@@ -53,6 +53,8 @@
 
 	var Dispatcher = _require.Dispatcher;
 
+	var Canvas = __webpack_require__(162);
+
 	var appDispatcher = new Dispatcher();
 
 	var ToolBar = React.createClass({
@@ -65,29 +67,29 @@
 	  render: function render() {
 	    return React.createElement('div', { className: 'p4 flex flex-column border', __source: {
 	        fileName: '../../../index.js',
-	        lineNumber: 17
+	        lineNumber: 19
 	      }
 	    }, React.createElement('h1', { className: 'mt2', __source: {
 	        fileName: '../../../index.js',
-	        lineNumber: 18
+	        lineNumber: 20
 	      }
 	    }, 'Toolbar'), React.createElement('div', { id: 'paintbrush',
 	      className: 'mt2 btn btn-primary black bg-silver',
 	      onClick: this.handleClick, __source: {
 	        fileName: '../../../index.js',
-	        lineNumber: 19
+	        lineNumber: 21
 	      }
 	    }, 'Paintbrush'), React.createElement('div', { id: 'rectangle',
 	      className: 'mt2 btn black bg-silver',
 	      onClick: this.handleClick, __source: {
 	        fileName: '../../../index.js',
-	        lineNumber: 24
+	        lineNumber: 26
 	      }
 	    }, 'Rectangle'), React.createElement('div', { id: 'floodfill',
 	      className: 'mt2 btn black bg-silver',
 	      onClick: this.handleClick, __source: {
 	        fileName: '../../../index.js',
-	        lineNumber: 29
+	        lineNumber: 31
 	      }
 	    }, 'Floodfill'));
 	  },
@@ -97,98 +99,6 @@
 	      actionType: "status-update",
 	      status: event.target.id
 	    });
-	  }
-	});
-
-	var Canvas = React.createClass({
-	  displayName: 'Canvas',
-
-	  render: function render() {
-	    return React.createElement('div', {
-	      __source: {
-	        fileName: '../../../index.js',
-	        lineNumber: 49
-	      }
-	    }, React.createElement('h1', {
-	      __source: {
-	        fileName: '../../../index.js',
-	        lineNumber: 50
-	      }
-	    }, 'Canvas'), React.createElement(StatusBar, {
-	      __source: {
-	        fileName: '../../../index.js',
-	        lineNumber: 51
-	      }
-	    }), React.createElement('canvas', { ref: 'canvas', className: 'border', __source: {
-	        fileName: '../../../index.js',
-	        lineNumber: 52
-	      }
-	    }));
-	  },
-
-	  componentDidMount: function componentDidMount() {
-	    var canvas = ReactDOM.findDOMNode(this.refs.canvas);
-	    var ctx = canvas.getContext("2d");
-	    ctx.fillStyle = "green";
-	    ctx.fillRect(10, 10, 100, 100);
-	  }
-	});
-
-	var RegisterForDispatchesMixin = function RegisterForDispatchesMixin(options) {
-	  return {
-	    componentWillMount: function componentWillMount() {
-	      this._registerForDispatches(options.getDispatcher.apply(this));
-	    },
-
-	    componentWillUnmount: function componentWillUnmount() {
-	      this._unregisterForDispatches(options.getDispatcher.apply(this));
-	    },
-
-	    _registerForDispatches: function _registerForDispatches(dispatcher) {
-	      this.dispatchToken = dispatcher.register(options.handleDispatches.bind(this));
-	    },
-
-	    _unregisterForDispatches: function _unregisterForDispatches(dispatcher) {
-	      dispatcher.unregister(this.dispatchToken);
-	    }
-	  };
-	};
-
-	var StatusBar = React.createClass({
-	  displayName: 'StatusBar',
-
-	  contextTypes: {
-	    dispatcher: React.PropTypes.instanceOf(Dispatcher)
-	  },
-
-	  mixins: [RegisterForDispatchesMixin({
-	    getDispatcher: function getDispatcher() {
-	      return this.context.dispatcher;
-	    },
-	    handleDispatches: function handleDispatches(payload) {
-	      this.handleDispatches(payload);
-	    }
-	  })],
-
-	  getInitialState: function getInitialState() {
-	    return {
-	      status: ""
-	    };
-	  },
-
-	  render: function render() {
-	    return React.createElement('div', {
-	      __source: {
-	        fileName: '../../../index.js',
-	        lineNumber: 110
-	      }
-	    }, 'Current tool: ', this.state.status);
-	  },
-
-	  handleDispatches: function handleDispatches(payload) {
-	    if (payload.actionType == "status-update") {
-	      this.setState({ status: payload.status });
-	    }
 	  }
 	});
 
@@ -215,17 +125,17 @@
 	  render: function render() {
 	    return React.createElement('div', { className: 'border flex', __source: {
 	        fileName: '../../../index.js',
-	        lineNumber: 144
+	        lineNumber: 69
 	      }
 	    }, React.createElement(ToolBar, {
 	      __source: {
 	        fileName: '../../../index.js',
-	        lineNumber: 145
+	        lineNumber: 70
 	      }
 	    }), React.createElement(Canvas, {
 	      __source: {
 	        fileName: '../../../index.js',
-	        lineNumber: 146
+	        lineNumber: 71
 	      }
 	    }));
 	  }
@@ -234,7 +144,7 @@
 	ReactDOM.render(React.createElement(App, {
 	  __source: {
 	    fileName: '../../../index.js',
-	    lineNumber: 153
+	    lineNumber: 78
 	  }
 	}), document.getElementById('react-container'));
 
@@ -20129,6 +20039,140 @@
 
 	module.exports = invariant;
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
+
+/***/ },
+/* 162 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var React = __webpack_require__(1);
+	var ReactDOM = __webpack_require__(158);
+
+	var StatusBar = __webpack_require__(163);
+
+	var Canvas = React.createClass({
+	  displayName: 'Canvas',
+
+	  render: function render() {
+	    return React.createElement('div', { className: 'p4', __source: {
+	        fileName: '../../../canvas.react.js',
+	        lineNumber: 11
+	      }
+	    }, React.createElement('h1', { className: 'mt2', __source: {
+	        fileName: '../../../canvas.react.js',
+	        lineNumber: 12
+	      }
+	    }, 'Canvas'), React.createElement('canvas', { ref: 'canvas', className: 'border', __source: {
+	        fileName: '../../../canvas.react.js',
+	        lineNumber: 13
+	      }
+	    }), React.createElement(StatusBar, {
+	      __source: {
+	        fileName: '../../../canvas.react.js',
+	        lineNumber: 14
+	      }
+	    }));
+	  },
+
+	  componentDidMount: function componentDidMount() {
+	    var canvas = ReactDOM.findDOMNode(this.refs.canvas);
+	    var ctx = canvas.getContext("2d");
+	    ctx.fillStyle = "green";
+	    ctx.fillRect(10, 10, 100, 100);
+	  }
+	});
+
+	module.exports = Canvas;
+
+/***/ },
+/* 163 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var React = __webpack_require__(1);
+	var ReactDOM = __webpack_require__(158);
+
+	var _require = __webpack_require__(159);
+
+	var Dispatcher = _require.Dispatcher;
+
+	var _require2 = __webpack_require__(164);
+
+	var RegisterForDispatchesMixin = _require2.RegisterForDispatchesMixin;
+
+	var StatusBar = React.createClass({
+	  displayName: 'StatusBar',
+
+	  contextTypes: {
+	    dispatcher: React.PropTypes.instanceOf(Dispatcher)
+	  },
+
+	  mixins: [RegisterForDispatchesMixin({
+	    getDispatcher: function getDispatcher() {
+	      return this.context.dispatcher;
+	    },
+	    handleDispatches: function handleDispatches(payload) {
+	      this.handleDispatches(payload);
+	    }
+	  })],
+
+	  getInitialState: function getInitialState() {
+	    return {
+	      status: ""
+	    };
+	  },
+
+	  render: function render() {
+	    return React.createElement('div', {
+	      __source: {
+	        fileName: '../../../statusBar.react.js',
+	        lineNumber: 34
+	      }
+	    }, 'Current tool: ', this.state.status);
+	  },
+
+	  handleDispatches: function handleDispatches(payload) {
+	    if (payload.actionType == "status-update") {
+	      this.setState({ status: payload.status });
+	    }
+	  }
+	});
+
+	module.exports = StatusBar;
+
+/***/ },
+/* 164 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _require = __webpack_require__(159);
+
+	var Dispatcher = _require.Dispatcher;
+
+	var RegisterForDispatchesMixin = function RegisterForDispatchesMixin(options) {
+	  return {
+	    componentWillMount: function componentWillMount() {
+	      this._registerForDispatches(options.getDispatcher.apply(this));
+	    },
+
+	    componentWillUnmount: function componentWillUnmount() {
+	      this._unregisterForDispatches(options.getDispatcher.apply(this));
+	    },
+
+	    _registerForDispatches: function _registerForDispatches(dispatcher) {
+	      this.dispatchToken = dispatcher.register(options.handleDispatches.bind(this));
+	    },
+
+	    _unregisterForDispatches: function _unregisterForDispatches(dispatcher) {
+	      dispatcher.unregister(this.dispatchToken);
+	    }
+	  };
+	};
+
+	module.exports.RegisterForDispatchesMixin = RegisterForDispatchesMixin;
 
 /***/ }
 /******/ ]);
