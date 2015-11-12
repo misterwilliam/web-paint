@@ -4,6 +4,7 @@
   "description": "\"Canvas based implementation of a simple paint program\"",
   "main": "index.js",
   "scripts": {
+    "build": "webpack",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -15,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/misterwilliam/web-paint/issues"
   },
-  "homepage": "https://github.com/misterwilliam/web-paint#readme"
+  "homepage": "https://github.com/misterwilliam/web-paint#readme",
+  "dependencies": {
+    "webpack": "^1.12.4"
+  }
 }
