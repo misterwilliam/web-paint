@@ -48,7 +48,8 @@ var Canvas = React.createClass({
     return (
       <div>
         <h1>Canvas</h1>
-        <canvas ref="canvas"/>
+        <StatusBar />
+        <canvas ref="canvas" className="border" />
       </div>
     )
   },
@@ -61,13 +62,61 @@ var Canvas = React.createClass({
   },
 });
 
+var RegisterForDispatchesMixin = function(options) {
+  return {
+    componentWillMount: function() {
+      this._registerForDispatches(options.getDispatcher.apply(this));
+    },
+
+    componentWillUnmount: function() {
+      this._unregisterForDispatches(options.getDispatcher.apply(this));
+    },
+
+    _registerForDispatches: function(dispatcher) {
+      this.dispatchToken = dispatcher.register(options.handleDispatches.bind(this));
+    },
+
+    _unregisterForDispatches: function(dispatcher) {
+      dispatcher.unregister(this.dispatchToken);
+    }
+  }
+}
+
 var StatusBar = React.createClass({
+
+  contextTypes: {
+    dispatcher: React.PropTypes.instanceOf(Dispatcher)
+  },
+
+  mixins: [
+    RegisterForDispatchesMixin({
+      getDispatcher: function() {
+        return this.context.dispatcher;
+      },
+      handleDispatches: function(payload) {
+        this.handleDispatches(payload);
+      }
+    })
+  ],
+
+  getInitialState: function() {
+    return {
+      status: ""
+    }
+  },
+
   render: function() {
     return (
       <div>
-        {this.props.status}
+        Current tool: {this.state.status}
       </div>
     )
+  },
+
+  handleDispatches: function(payload) {
+    if (payload.actionType == "status-update") {
+      this.setState({status: payload.status});
+    }
   }
 });
 
@@ -81,45 +130,23 @@ var App = React.createClass({
   },
 
   getChildContext: function() {
-    return {dispatcher: this.dispatcher}
-  },
-
-  getInitialState: function() {
     return {
-      status: "",
+      dispatcher: this.dispatcher
     }
   },
 
   componentWillMount: function() {
     this.dispatcher = appDispatcher;
-    this._registerForDispatches(this.dispatcher);
   },
 
   render: function() {
     return (
       <div className="border flex">
         <ToolBar />
-        <StatusBar status={this.state.status} />
         <Canvas />
       </div>
     )
-  },
-
-  _handleDispatches: function(payload) {
-    if (payload.actionType == "status-update") {
-      this.setState({status: payload.status});
-    }
-  },
-
-  _registerForDispatches: function(dispatcher) {
-    this.dispatchToken = dispatcher.register(this._handleDispatches);
-  },
-
-  _unregisterForDispatches: function(dispatcher) {
-    dispatcher.unregister(this.dispatchToken);
   }
-
-
 });
 
 ReactDOM.render(

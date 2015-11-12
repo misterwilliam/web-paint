@@ -114,9 +114,14 @@
 	        fileName: '../../../index.js',
 	        lineNumber: 50
 	      }
-	    }, 'Canvas'), React.createElement('canvas', { ref: 'canvas', __source: {
+	    }, 'Canvas'), React.createElement(StatusBar, {
+	      __source: {
 	        fileName: '../../../index.js',
 	        lineNumber: 51
+	      }
+	    }), React.createElement('canvas', { ref: 'canvas', className: 'border', __source: {
+	        fileName: '../../../index.js',
+	        lineNumber: 52
 	      }
 	    }));
 	  },
@@ -129,16 +134,61 @@
 	  }
 	});
 
+	var RegisterForDispatchesMixin = function RegisterForDispatchesMixin(options) {
+	  return {
+	    componentWillMount: function componentWillMount() {
+	      this._registerForDispatches(options.getDispatcher.apply(this));
+	    },
+
+	    componentWillUnmount: function componentWillUnmount() {
+	      this._unregisterForDispatches(options.getDispatcher.apply(this));
+	    },
+
+	    _registerForDispatches: function _registerForDispatches(dispatcher) {
+	      this.dispatchToken = dispatcher.register(options.handleDispatches.bind(this));
+	    },
+
+	    _unregisterForDispatches: function _unregisterForDispatches(dispatcher) {
+	      dispatcher.unregister(this.dispatchToken);
+	    }
+	  };
+	};
+
 	var StatusBar = React.createClass({
 	  displayName: 'StatusBar',
+
+	  contextTypes: {
+	    dispatcher: React.PropTypes.instanceOf(Dispatcher)
+	  },
+
+	  mixins: [RegisterForDispatchesMixin({
+	    getDispatcher: function getDispatcher() {
+	      return this.context.dispatcher;
+	    },
+	    handleDispatches: function handleDispatches(payload) {
+	      this.handleDispatches(payload);
+	    }
+	  })],
+
+	  getInitialState: function getInitialState() {
+	    return {
+	      status: ""
+	    };
+	  },
 
 	  render: function render() {
 	    return React.createElement('div', {
 	      __source: {
 	        fileName: '../../../index.js',
-	        lineNumber: 67
+	        lineNumber: 110
 	      }
-	    }, this.props.status);
+	    }, 'Current tool: ', this.state.status);
+	  },
+
+	  handleDispatches: function handleDispatches(payload) {
+	    if (payload.actionType == "status-update") {
+	      this.setState({ status: payload.status });
+	    }
 	  }
 	});
 
@@ -153,62 +203,38 @@
 	  },
 
 	  getChildContext: function getChildContext() {
-	    return { dispatcher: this.dispatcher };
-	  },
-
-	  getInitialState: function getInitialState() {
 	    return {
-	      status: ""
+	      dispatcher: this.dispatcher
 	    };
 	  },
 
 	  componentWillMount: function componentWillMount() {
 	    this.dispatcher = appDispatcher;
-	    this._registerForDispatches(this.dispatcher);
 	  },
 
 	  render: function render() {
 	    return React.createElement('div', { className: 'border flex', __source: {
 	        fileName: '../../../index.js',
-	        lineNumber: 100
+	        lineNumber: 144
 	      }
 	    }, React.createElement(ToolBar, {
 	      __source: {
 	        fileName: '../../../index.js',
-	        lineNumber: 101
-	      }
-	    }), React.createElement(StatusBar, { status: this.state.status, __source: {
-	        fileName: '../../../index.js',
-	        lineNumber: 102
+	        lineNumber: 145
 	      }
 	    }), React.createElement(Canvas, {
 	      __source: {
 	        fileName: '../../../index.js',
-	        lineNumber: 103
+	        lineNumber: 146
 	      }
 	    }));
-	  },
-
-	  _handleDispatches: function _handleDispatches(payload) {
-	    if (payload.actionType == "status-update") {
-	      this.setState({ status: payload.status });
-	    }
-	  },
-
-	  _registerForDispatches: function _registerForDispatches(dispatcher) {
-	    this.dispatchToken = dispatcher.register(this._handleDispatches);
-	  },
-
-	  _unregisterForDispatches: function _unregisterForDispatches(dispatcher) {
-	    dispatcher.unregister(this.dispatchToken);
 	  }
-
 	});
 
 	ReactDOM.render(React.createElement(App, {
 	  __source: {
 	    fileName: '../../../index.js',
-	    lineNumber: 126
+	    lineNumber: 153
 	  }
 	}), document.getElementById('react-container'));
 
