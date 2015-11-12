@@ -54,53 +54,9 @@
 	var Dispatcher = _require.Dispatcher;
 
 	var Canvas = __webpack_require__(162);
+	var ToolBar = __webpack_require__(165);
 
 	var appDispatcher = new Dispatcher();
-
-	var ToolBar = React.createClass({
-	  displayName: 'ToolBar',
-
-	  contextTypes: {
-	    dispatcher: React.PropTypes.instanceOf(Dispatcher)
-	  },
-
-	  render: function render() {
-	    return React.createElement('div', { className: 'p4 flex flex-column border', __source: {
-	        fileName: '../../../index.js',
-	        lineNumber: 19
-	      }
-	    }, React.createElement('h1', { className: 'mt2', __source: {
-	        fileName: '../../../index.js',
-	        lineNumber: 20
-	      }
-	    }, 'Toolbar'), React.createElement('div', { id: 'paintbrush',
-	      className: 'mt2 btn btn-primary black bg-silver',
-	      onClick: this.handleClick, __source: {
-	        fileName: '../../../index.js',
-	        lineNumber: 21
-	      }
-	    }, 'Paintbrush'), React.createElement('div', { id: 'rectangle',
-	      className: 'mt2 btn black bg-silver',
-	      onClick: this.handleClick, __source: {
-	        fileName: '../../../index.js',
-	        lineNumber: 26
-	      }
-	    }, 'Rectangle'), React.createElement('div', { id: 'floodfill',
-	      className: 'mt2 btn black bg-silver',
-	      onClick: this.handleClick, __source: {
-	        fileName: '../../../index.js',
-	        lineNumber: 31
-	      }
-	    }, 'Floodfill'));
-	  },
-
-	  handleClick: function handleClick(event) {
-	    this.context.dispatcher.dispatch({
-	      actionType: "status-update",
-	      status: event.target.id
-	    });
-	  }
-	});
 
 	var App = React.createClass({
 	  displayName: 'App',
@@ -125,17 +81,17 @@
 	  render: function render() {
 	    return React.createElement('div', { className: 'border flex', __source: {
 	        fileName: '../../../index.js',
-	        lineNumber: 69
+	        lineNumber: 34
 	      }
 	    }, React.createElement(ToolBar, {
 	      __source: {
 	        fileName: '../../../index.js',
-	        lineNumber: 70
+	        lineNumber: 35
 	      }
 	    }), React.createElement(Canvas, {
 	      __source: {
 	        fileName: '../../../index.js',
-	        lineNumber: 71
+	        lineNumber: 36
 	      }
 	    }));
 	  }
@@ -144,7 +100,7 @@
 	ReactDOM.render(React.createElement(App, {
 	  __source: {
 	    fileName: '../../../index.js',
-	    lineNumber: 78
+	    lineNumber: 43
 	  }
 	}), document.getElementById('react-container'));
 
@@ -20092,7 +20048,6 @@
 	'use strict';
 
 	var React = __webpack_require__(1);
-	var ReactDOM = __webpack_require__(158);
 
 	var _require = __webpack_require__(159);
 
@@ -20128,7 +20083,7 @@
 	    return React.createElement('div', {
 	      __source: {
 	        fileName: '../../../statusBar.react.js',
-	        lineNumber: 34
+	        lineNumber: 33
 	      }
 	    }, 'Current tool: ', this.state.status);
 	  },
@@ -20173,6 +20128,66 @@
 	};
 
 	module.exports.RegisterForDispatchesMixin = RegisterForDispatchesMixin;
+
+/***/ },
+/* 165 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var React = __webpack_require__(1);
+
+	var _require = __webpack_require__(159);
+
+	var Dispatcher = _require.Dispatcher;
+
+	var ToolBar = React.createClass({
+	  displayName: 'ToolBar',
+
+	  contextTypes: {
+	    dispatcher: React.PropTypes.instanceOf(Dispatcher)
+	  },
+
+	  render: function render() {
+	    return React.createElement('div', { className: 'p4 flex flex-column border', __source: {
+	        fileName: '../../../toolBar.react.js',
+	        lineNumber: 14
+	      }
+	    }, React.createElement('h1', { className: 'mt2', __source: {
+	        fileName: '../../../toolBar.react.js',
+	        lineNumber: 15
+	      }
+	    }, 'Toolbar'), React.createElement('div', { id: 'paintbrush',
+	      className: 'mt2 btn btn-primary black bg-silver',
+	      onClick: this.handleClick, __source: {
+	        fileName: '../../../toolBar.react.js',
+	        lineNumber: 16
+	      }
+	    }, 'Paintbrush'), React.createElement('div', { id: 'rectangle',
+	      className: 'mt2 btn black bg-silver',
+	      onClick: this.handleClick, __source: {
+	        fileName: '../../../toolBar.react.js',
+	        lineNumber: 21
+	      }
+	    }, 'Rectangle'), React.createElement('div', { id: 'floodfill',
+	      className: 'mt2 btn black bg-silver',
+	      onClick: this.handleClick, __source: {
+	        fileName: '../../../toolBar.react.js',
+	        lineNumber: 26
+	      }
+	    }, 'Floodfill'));
+	  },
+
+	  handleClick: function handleClick(event) {
+	    this.context.dispatcher.dispatch({
+	      actionType: "status-update",
+	      // $FlowIgnore: flow unable to infer that id is available on event.target
+	      status: event.target.id
+	    });
+	  }
+	});
+
+	module.exports = ToolBar;
 
 /***/ }
 /******/ ]);
