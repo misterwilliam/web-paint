@@ -22,15 +22,29 @@ var GetPoint2DFromCanvasClickEvent = function(event: SyntheticEvent) {
   var x = event.pageX - canvas.offsetLeft;
   // $FlowIgnore
   var y = event.pageY - canvas.offsetTop;
+  return CanvasCoordToPixelGridCoord(new Point2D(x, y));
+}
+
+var CanvasCoordToPixelGridCoord = function(canvasPoint: Point2D): Point2D {
+  var x = Math.floor(canvasPoint.x / 10);
+  var y = Math.floor(canvasPoint.y / 10);
+  return new Point2D(x, y);
+}
+
+var PixelGridCoordToCanvasCoord = function(canvasPoint: Point2D): Point2D {
+  var x = canvasPoint.x * 10;
+  var y = canvasPoint.y * 10;
   return new Point2D(x, y);
 }
 
 var PixelGrid = React.createClass({
+
+  ctx: CanvasRenderingContext2D,
+
   componentDidMount: function() {
     var canvas = ReactDOM.findDOMNode(this.refs.canvas);
-    var ctx = canvas.getContext("2d");
-    ctx.fillStyle = "green";
-    ctx.fillRect(10, 10, 100, 100);
+    this.ctx = canvas.getContext("2d");
+    this.ctx.fillStyle = "green";
   },
 
   render: function(): ?ReactElement {
@@ -39,8 +53,13 @@ var PixelGrid = React.createClass({
     )
   },
 
+  drawPixel: function(point) {
+    var canvasPoint = PixelGridCoordToCanvasCoord(point);
+    this.ctx.fillRect(canvasPoint.x, canvasPoint.y, 10, 10);
+  },
+
   handleClick: function(event: SyntheticEvent) {
-    console.log(this.getClickLocation(event))
+    this.drawPixel(this.getClickLocation(event));
   },
 
   getClickLocation: function(event: SyntheticEvent): Point2D {

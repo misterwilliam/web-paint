@@ -20022,29 +20022,47 @@
 	  var x = event.pageX - canvas.offsetLeft;
 	  // $FlowIgnore
 	  var y = event.pageY - canvas.offsetTop;
+	  return CanvasCoordToPixelGridCoord(new Point2D(x, y));
+	};
+
+	var CanvasCoordToPixelGridCoord = function CanvasCoordToPixelGridCoord(canvasPoint) {
+	  var x = Math.floor(canvasPoint.x / 10);
+	  var y = Math.floor(canvasPoint.y / 10);
+	  return new Point2D(x, y);
+	};
+
+	var PixelGridCoordToCanvasCoord = function PixelGridCoordToCanvasCoord(canvasPoint) {
+	  var x = canvasPoint.x * 10;
+	  var y = canvasPoint.y * 10;
 	  return new Point2D(x, y);
 	};
 
 	var PixelGrid = React.createClass({
 	  displayName: 'PixelGrid',
 
+	  ctx: CanvasRenderingContext2D,
+
 	  componentDidMount: function componentDidMount() {
 	    var canvas = ReactDOM.findDOMNode(this.refs.canvas);
-	    var ctx = canvas.getContext("2d");
-	    ctx.fillStyle = "green";
-	    ctx.fillRect(10, 10, 100, 100);
+	    this.ctx = canvas.getContext("2d");
+	    this.ctx.fillStyle = "green";
 	  },
 
 	  render: function render() {
 	    return React.createElement('canvas', { ref: 'canvas', className: 'border', onClick: this.handleClick, __source: {
 	        fileName: '../../../canvas.react.js',
-	        lineNumber: 38
+	        lineNumber: 52
 	      }
 	    });
 	  },
 
+	  drawPixel: function drawPixel(point) {
+	    var canvasPoint = PixelGridCoordToCanvasCoord(point);
+	    this.ctx.fillRect(canvasPoint.x, canvasPoint.y, 10, 10);
+	  },
+
 	  handleClick: function handleClick(event) {
-	    console.log(this.getClickLocation(event));
+	    this.drawPixel(this.getClickLocation(event));
 	  },
 
 	  getClickLocation: function getClickLocation(event) {
@@ -20058,21 +20076,21 @@
 	  render: function render() {
 	    return React.createElement('div', { className: 'p4', __source: {
 	        fileName: '../../../canvas.react.js',
-	        lineNumber: 55
+	        lineNumber: 74
 	      }
 	    }, React.createElement('h1', { className: 'mt2', __source: {
 	        fileName: '../../../canvas.react.js',
-	        lineNumber: 56
+	        lineNumber: 75
 	      }
 	    }, 'Canvas'), React.createElement(PixelGrid, {
 	      __source: {
 	        fileName: '../../../canvas.react.js',
-	        lineNumber: 57
+	        lineNumber: 76
 	      }
 	    }), React.createElement(StatusBar, {
 	      __source: {
 	        fileName: '../../../canvas.react.js',
-	        lineNumber: 58
+	        lineNumber: 77
 	      }
 	    }));
 	  }
