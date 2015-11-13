@@ -20006,10 +20006,6 @@
 
 	'use strict';
 
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
 	var _ = __webpack_require__(163);
 	var React = __webpack_require__(1);
 	var ReactDOM = __webpack_require__(158);
@@ -20018,188 +20014,16 @@
 
 	var Dispatcher = _require.Dispatcher;
 
+	var _require2 = __webpack_require__(174);
+
+	var PixelGrid = _require2.PixelGrid;
+	var Point2D = _require2.Point2D;
+
 	var StatusBar = __webpack_require__(164);
 
-	var _require2 = __webpack_require__(165);
+	var _require3 = __webpack_require__(165);
 
-	var RegisterForDispatchesMixin = _require2.RegisterForDispatchesMixin;
-
-	var Point2D = function Point2D(x, y) {
-	  _classCallCheck(this, Point2D);
-
-	  this.x = x;
-	  this.y = y;
-	};
-
-	var GetPoint2DFromCanvasClickEvent = function GetPoint2DFromCanvasClickEvent(event) {
-	  var canvas = event.target;
-	  // $FlowIgnore
-	  var x = event.pageX - canvas.offsetLeft;
-	  // $FlowIgnore
-	  var y = event.pageY - canvas.offsetTop;
-	  return CanvasCoordToPixelGridCoord(new Point2D(x, y));
-	};
-
-	var CanvasCoordToPixelGridCoord = function CanvasCoordToPixelGridCoord(canvasPoint) {
-	  var x = Math.floor(canvasPoint.x / 10);
-	  var y = Math.floor(canvasPoint.y / 10);
-	  return new Point2D(x, y);
-	};
-
-	var PixelGridCoordToCanvasCoord = function PixelGridCoordToCanvasCoord(canvasPoint) {
-	  var x = canvasPoint.x * 10;
-	  var y = canvasPoint.y * 10;
-	  return new Point2D(x, y);
-	};
-
-	var Grid = (function () {
-	  function Grid() {
-	    _classCallCheck(this, Grid);
-	  }
-
-	  _createClass(Grid, [{
-	    key: 'init',
-	    value: function init(width, height) {
-	      this.width = width;
-	      this.height = height;
-
-	      this.data = [];
-	      for (var i = 0; i < height; i++) {
-	        this.data[i] = [];
-	      }
-	    }
-	  }, {
-	    key: 'getPixel',
-	    value: function getPixel(point) {
-	      var value = this.data[point.x][point.y];
-	      if (value == true) {
-	        return true;
-	      } else {
-	        return false;
-	      }
-	    }
-	  }, {
-	    key: 'setPixel',
-	    value: function setPixel(point, value) {
-	      this.data[point.x][point.y] = value;
-	    }
-	  }, {
-	    key: 'isPointWithinBounds',
-	    value: function isPointWithinBounds(point) {
-	      if (point.x >= 0 && point.x < this.width && point.y >= 0 && point.y < this.height) {
-	        return true;
-	      } else {
-	        return false;
-	      }
-	    }
-	  }, {
-	    key: 'getSameColorConnectedPoints',
-	    value: function getSameColorConnectedPoints(startPoint) {
-	      // Init data
-	      var todo = [];
-	      todo.push(startPoint);
-	      var seen = [];
-	      seen.push(startPoint);
-	      var sameColorPoints = [];
-	      var startColor = this.getPixel(startPoint);
-	      // Run BFS
-	      while (todo.length > 0) {
-	        var currentPoint = todo.pop();
-	        if (this.getPixel(currentPoint) == startColor) {
-	          sameColorPoints.push(currentPoint);
-	          for (var i = -1; i < 2; i++) {
-	            for (var j = -1; j < 2; j++) {
-	              if (!(i == 0 && j == 0)) {
-	                var newPoint = new Point2D(currentPoint.x + i, currentPoint.y + j);
-	                if (this.isPointWithinBounds(newPoint)) {
-	                  if (!_.find(seen, function (point) {
-	                    return point.x == newPoint.x && point.y == newPoint.y;
-	                  })) {
-	                    seen.push(newPoint);
-	                    todo.push(newPoint);
-	                  }
-	                }
-	              }
-	            }
-	          }
-	        }
-	      }
-	      return sameColorPoints;
-	    }
-	  }]);
-
-	  return Grid;
-	})();
-
-	var PixelGrid = React.createClass({
-	  displayName: 'PixelGrid',
-
-	  propTypes: {
-	    width: React.PropTypes.number.isRequired,
-	    height: React.PropTypes.number.isRequired
-	  },
-
-	  grid: new Grid(),
-
-	  componentDidMount: function componentDidMount() {
-	    this.grid.init(this.props.width, this.props.height);
-	    this.getCanvasContext().fillStyle = "green";
-	  },
-
-	  render: function render() {
-	    return React.createElement('canvas', { ref: 'canvas', className: 'border', onClick: this.handleClick,
-	      width: this.props.width * 10,
-	      height: this.props.height * 10, __source: {
-	        fileName: '../../../canvas.react.js',
-	        lineNumber: 135
-	      }
-	    });
-	  },
-
-	  getPixel: function getPixel(point) {
-	    this.grid.getPixel(point);
-	  },
-
-	  drawPixel: function drawPixel(point) {
-	    this.grid.setPixel(point, true);
-	    var canvasPoint = PixelGridCoordToCanvasCoord(point);
-	    this.getCanvasContext().fillRect(canvasPoint.x, canvasPoint.y, 10, 10);
-	  },
-
-	  erasePixel: function erasePixel(point) {
-	    this.grid.setPixel(point, false);
-	    var canvasPoint = PixelGridCoordToCanvasCoord(point);
-	    this.getCanvasContext().clearRect(canvasPoint.x, canvasPoint.y, 10, 10);
-	  },
-
-	  floodFill: function floodFill(point) {
-	    var _this = this;
-
-	    var startColor = this.grid.getPixel(point);
-	    var floodPath = this.grid.getSameColorConnectedPoints(point);
-	    _.each(floodPath, function (point) {
-	      if (startColor) {
-	        _this.erasePixel(point);
-	      } else {
-	        _this.drawPixel(point);
-	      }
-	    });
-	  },
-
-	  handleClick: function handleClick(event) {
-	    var point = this.getClickLocation(event);
-	    this.props.onClick(point);
-	  },
-
-	  getClickLocation: function getClickLocation(event) {
-	    return GetPoint2DFromCanvasClickEvent(event);
-	  },
-
-	  getCanvasContext: function getCanvasContext() {
-	    var canvas = ReactDOM.findDOMNode(this.refs.canvas);
-	    return canvas.getContext("2d");
-	  }
-	});
+	var RegisterForDispatchesMixin = _require3.RegisterForDispatchesMixin;
 
 	var Canvas = React.createClass({
 	  displayName: 'Canvas',
@@ -20226,21 +20050,21 @@
 	  render: function render() {
 	    return React.createElement('div', { className: 'p4', __source: {
 	        fileName: '../../../canvas.react.js',
-	        lineNumber: 210
+	        lineNumber: 38
 	      }
 	    }, React.createElement('h1', { className: 'mt2', __source: {
 	        fileName: '../../../canvas.react.js',
-	        lineNumber: 211
+	        lineNumber: 39
 	      }
 	    }, 'Canvas'), React.createElement(PixelGrid, { ref: 'pixelGrid',
 	      width: 50, height: 50,
 	      onClick: this.handleClick, __source: {
 	        fileName: '../../../canvas.react.js',
-	        lineNumber: 212
+	        lineNumber: 40
 	      }
 	    }), React.createElement(StatusBar, { status: this.state.status, __source: {
 	        fileName: '../../../canvas.react.js',
-	        lineNumber: 215
+	        lineNumber: 43
 	      }
 	    }));
 	  },
@@ -22283,6 +22107,197 @@
 
 	// exports
 
+
+/***/ },
+/* 174 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var Point2D = function Point2D(x, y) {
+	  _classCallCheck(this, Point2D);
+
+	  this.x = x;
+	  this.y = y;
+	};
+
+	module.exports.Point2D = Point2D;
+
+	var GetPoint2DFromCanvasClickEvent = function GetPoint2DFromCanvasClickEvent(event) {
+	  var canvas = event.target;
+	  // $FlowIgnore
+	  var x = event.pageX - canvas.offsetLeft;
+	  // $FlowIgnore
+	  var y = event.pageY - canvas.offsetTop;
+	  return CanvasCoordToPixelGridCoord(new Point2D(x, y));
+	};
+
+	var CanvasCoordToPixelGridCoord = function CanvasCoordToPixelGridCoord(canvasPoint) {
+	  var x = Math.floor(canvasPoint.x / 10);
+	  var y = Math.floor(canvasPoint.y / 10);
+	  return new Point2D(x, y);
+	};
+
+	var PixelGridCoordToCanvasCoord = function PixelGridCoordToCanvasCoord(canvasPoint) {
+	  var x = canvasPoint.x * 10;
+	  var y = canvasPoint.y * 10;
+	  return new Point2D(x, y);
+	};
+
+	var Grid = (function () {
+	  function Grid() {
+	    _classCallCheck(this, Grid);
+	  }
+
+	  _createClass(Grid, [{
+	    key: "init",
+	    value: function init(width, height) {
+	      this.width = width;
+	      this.height = height;
+
+	      this.data = [];
+	      for (var i = 0; i < height; i++) {
+	        this.data[i] = [];
+	      }
+	    }
+	  }, {
+	    key: "getPixel",
+	    value: function getPixel(point) {
+	      var value = this.data[point.x][point.y];
+	      if (value == true) {
+	        return true;
+	      } else {
+	        return false;
+	      }
+	    }
+	  }, {
+	    key: "setPixel",
+	    value: function setPixel(point, value) {
+	      this.data[point.x][point.y] = value;
+	    }
+	  }, {
+	    key: "isPointWithinBounds",
+	    value: function isPointWithinBounds(point) {
+	      if (point.x >= 0 && point.x < this.width && point.y >= 0 && point.y < this.height) {
+	        return true;
+	      } else {
+	        return false;
+	      }
+	    }
+	  }, {
+	    key: "getSameColorConnectedPoints",
+	    value: function getSameColorConnectedPoints(startPoint) {
+	      // Init data
+	      var todo = [];
+	      todo.push(startPoint);
+	      var seen = [];
+	      seen.push(startPoint);
+	      var sameColorPoints = [];
+	      var startColor = this.getPixel(startPoint);
+	      // Run BFS
+	      while (todo.length > 0) {
+	        var currentPoint = todo.pop();
+	        if (this.getPixel(currentPoint) == startColor) {
+	          sameColorPoints.push(currentPoint);
+	          for (var i = -1; i < 2; i++) {
+	            for (var j = -1; j < 2; j++) {
+	              if (!(i == 0 && j == 0)) {
+	                var newPoint = new Point2D(currentPoint.x + i, currentPoint.y + j);
+	                if (this.isPointWithinBounds(newPoint)) {
+	                  if (!_.find(seen, function (point) {
+	                    return point.x == newPoint.x && point.y == newPoint.y;
+	                  })) {
+	                    seen.push(newPoint);
+	                    todo.push(newPoint);
+	                  }
+	                }
+	              }
+	            }
+	          }
+	        }
+	      }
+	      return sameColorPoints;
+	    }
+	  }]);
+
+	  return Grid;
+	})();
+
+	var PixelGrid = React.createClass({
+	  displayName: "PixelGrid",
+
+	  propTypes: {
+	    width: React.PropTypes.number.isRequired,
+	    height: React.PropTypes.number.isRequired
+	  },
+
+	  grid: new Grid(),
+
+	  componentDidMount: function componentDidMount() {
+	    this.grid.init(this.props.width, this.props.height);
+	    this.getCanvasContext().fillStyle = "green";
+	  },
+
+	  render: function render() {
+	    return React.createElement("canvas", { ref: "canvas", className: "border", onClick: this.handleClick,
+	      width: this.props.width * 10,
+	      height: this.props.height * 10, __source: {
+	        fileName: "../../../pixelGrid.react.js",
+	        lineNumber: 125
+	      }
+	    });
+	  },
+
+	  getPixel: function getPixel(point) {
+	    this.grid.getPixel(point);
+	  },
+
+	  drawPixel: function drawPixel(point) {
+	    this.grid.setPixel(point, true);
+	    var canvasPoint = PixelGridCoordToCanvasCoord(point);
+	    this.getCanvasContext().fillRect(canvasPoint.x, canvasPoint.y, 10, 10);
+	  },
+
+	  erasePixel: function erasePixel(point) {
+	    this.grid.setPixel(point, false);
+	    var canvasPoint = PixelGridCoordToCanvasCoord(point);
+	    this.getCanvasContext().clearRect(canvasPoint.x, canvasPoint.y, 10, 10);
+	  },
+
+	  floodFill: function floodFill(point) {
+	    var _this = this;
+
+	    var startColor = this.grid.getPixel(point);
+	    var floodPath = this.grid.getSameColorConnectedPoints(point);
+	    _.each(floodPath, function (point) {
+	      if (startColor) {
+	        _this.erasePixel(point);
+	      } else {
+	        _this.drawPixel(point);
+	      }
+	    });
+	  },
+
+	  handleClick: function handleClick(event) {
+	    var point = this.getClickLocation(event);
+	    this.props.onClick(point);
+	  },
+
+	  getClickLocation: function getClickLocation(event) {
+	    return GetPoint2DFromCanvasClickEvent(event);
+	  },
+
+	  getCanvasContext: function getCanvasContext() {
+	    var canvas = ReactDOM.findDOMNode(this.refs.canvas);
+	    return canvas.getContext("2d");
+	  }
+	});
+
+	module.exports.PixelGrid = PixelGrid;
 
 /***/ }
 /******/ ]);
