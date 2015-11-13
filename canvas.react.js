@@ -74,7 +74,7 @@ class Grid {
 
   isPointWithinBounds(point) {
     if ((point.x >= 0 && point.x < this.width) &&
-         (point.x >= 0 && point.x < this.height)) {
+         (point.y >= 0 && point.y < this.height)) {
       return true;
     } else {
       return false;
@@ -94,13 +94,17 @@ class Grid {
       var currentPoint = todo.pop();
       if (this.getPixel(currentPoint) == startColor) {
         sameColorPoints.push(currentPoint);
-        for (var i=0; i < 2; i++) {
-          for (var j=0; j < 2; j++) {
+        for (var i=-1; i < 2; i++) {
+          for (var j=-1; j < 2; j++) {
             if (!(i == 0 && j == 0)) {
-              var newPoint = new Point2D(startPoint.x + i, startPoint.y + j);
+              var newPoint = new Point2D(currentPoint.x + i, currentPoint.y + j);
               if (this.isPointWithinBounds(newPoint)) {
-                seen.push(newPoint);
-                todo.push(newPoint);
+                if (!_.find(seen, (point) => {
+                                    return point.x == newPoint.x && point.y == newPoint.y
+                                  })) {
+                  seen.push(newPoint);
+                  todo.push(newPoint);
+                }
               }
             }
           }
@@ -134,6 +138,10 @@ var PixelGrid = React.createClass({
     )
   },
 
+  getPixel: function(point) {
+    this.grid.getPixel(point);
+  },
+
   drawPixel: function(point) {
     this.grid.setPixel(point, true);
     var canvasPoint = PixelGridCoordToCanvasCoord(point);
@@ -150,18 +158,17 @@ var PixelGrid = React.createClass({
     var startColor = this.grid.getPixel(point);
     var floodPath = this.grid.getSameColorConnectedPoints(point);
     _.each(floodPath, (point) => {
-      this.grid.setPixel(point, !startColor);
+      if (startColor) {
+        this.erasePixel(point);
+      } else {
+        this.drawPixel(point);
+      }
     })
   },
 
   handleClick: function(event: SyntheticEvent) {
     var point = this.getClickLocation(event);
-    var value = this.grid.getPixel(point);
-    if (value) {
-      this.erasePixel(point);
-    } else {
-      this.drawPixel(point);
-    }
+    this.props.onClick(point);
   },
 
   getClickLocation: function(event: SyntheticEvent): Point2D {
@@ -202,10 +209,25 @@ var Canvas = React.createClass({
     return (
       <div className="p4">
         <h1 className="mt2">Canvas</h1>
-        <PixelGrid width={50} height={50} />
+        <PixelGrid ref="pixelGrid"
+                   width={50} height={50}
+                   onClick={this.handleClick} />
         <StatusBar status={this.state.status} />
       </div>
     )
+  },
+
+  handleClick: function(point: Point2D) {
+    if (this.state.status == "paintbrush") {
+      var value = this.refs.pixelGrid.grid.getPixel(point);
+      if (value) {
+        this.refs.pixelGrid.erasePixel(point);
+      } else {
+        this.refs.pixelGrid.drawPixel(point);
+      }
+    } else if (this.state.status == "floodfill") {
+      this.refs.pixelGrid.floodFill(point);
+    }
   },
 
   handleDispatches: function(payload: Object) {

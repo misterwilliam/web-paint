@@ -20082,7 +20082,7 @@
 	  }, {
 	    key: 'isPointWithinBounds',
 	    value: function isPointWithinBounds(point) {
-	      if (point.x >= 0 && point.x < this.width && point.x >= 0 && point.x < this.height) {
+	      if (point.x >= 0 && point.x < this.width && point.y >= 0 && point.y < this.height) {
 	        return true;
 	      } else {
 	        return false;
@@ -20103,13 +20103,17 @@
 	        var currentPoint = todo.pop();
 	        if (this.getPixel(currentPoint) == startColor) {
 	          sameColorPoints.push(currentPoint);
-	          for (var i = 0; i < 2; i++) {
-	            for (var j = 0; j < 2; j++) {
+	          for (var i = -1; i < 2; i++) {
+	            for (var j = -1; j < 2; j++) {
 	              if (!(i == 0 && j == 0)) {
-	                var newPoint = new Point2D(startPoint.x + i, startPoint.y + j);
+	                var newPoint = new Point2D(currentPoint.x + i, currentPoint.y + j);
 	                if (this.isPointWithinBounds(newPoint)) {
-	                  seen.push(newPoint);
-	                  todo.push(newPoint);
+	                  if (!_.find(seen, function (point) {
+	                    return point.x == newPoint.x && point.y == newPoint.y;
+	                  })) {
+	                    seen.push(newPoint);
+	                    todo.push(newPoint);
+	                  }
 	                }
 	              }
 	            }
@@ -20143,9 +20147,13 @@
 	      width: this.props.width * 10,
 	      height: this.props.height * 10, __source: {
 	        fileName: '../../../canvas.react.js',
-	        lineNumber: 131
+	        lineNumber: 135
 	      }
 	    });
+	  },
+
+	  getPixel: function getPixel(point) {
+	    this.grid.getPixel(point);
 	  },
 
 	  drawPixel: function drawPixel(point) {
@@ -20166,18 +20174,17 @@
 	    var startColor = this.grid.getPixel(point);
 	    var floodPath = this.grid.getSameColorConnectedPoints(point);
 	    _.each(floodPath, function (point) {
-	      _this.grid.setPixel(point, !startColor);
+	      if (startColor) {
+	        _this.erasePixel(point);
+	      } else {
+	        _this.drawPixel(point);
+	      }
 	    });
 	  },
 
 	  handleClick: function handleClick(event) {
 	    var point = this.getClickLocation(event);
-	    var value = this.grid.getPixel(point);
-	    if (value) {
-	      this.erasePixel(point);
-	    } else {
-	      this.drawPixel(point);
-	    }
+	    this.props.onClick(point);
 	  },
 
 	  getClickLocation: function getClickLocation(event) {
@@ -20215,21 +20222,36 @@
 	  render: function render() {
 	    return React.createElement('div', { className: 'p4', __source: {
 	        fileName: '../../../canvas.react.js',
-	        lineNumber: 203
+	        lineNumber: 210
 	      }
 	    }, React.createElement('h1', { className: 'mt2', __source: {
 	        fileName: '../../../canvas.react.js',
-	        lineNumber: 204
+	        lineNumber: 211
 	      }
-	    }, 'Canvas'), React.createElement(PixelGrid, { width: 50, height: 50, __source: {
+	    }, 'Canvas'), React.createElement(PixelGrid, { ref: 'pixelGrid',
+	      width: 50, height: 50,
+	      onClick: this.handleClick, __source: {
 	        fileName: '../../../canvas.react.js',
-	        lineNumber: 205
+	        lineNumber: 212
 	      }
 	    }), React.createElement(StatusBar, { status: this.state.status, __source: {
 	        fileName: '../../../canvas.react.js',
-	        lineNumber: 206
+	        lineNumber: 215
 	      }
 	    }));
+	  },
+
+	  handleClick: function handleClick(point) {
+	    if (this.state.status == "paintbrush") {
+	      var value = this.refs.pixelGrid.grid.getPixel(point);
+	      if (value) {
+	        this.refs.pixelGrid.erasePixel(point);
+	      } else {
+	        this.refs.pixelGrid.drawPixel(point);
+	      }
+	    } else if (this.state.status == "floodfill") {
+	      this.refs.pixelGrid.floodFill(point);
+	    }
 	  },
 
 	  handleDispatches: function handleDispatches(payload) {
