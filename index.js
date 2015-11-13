@@ -3,6 +3,9 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
 var { Dispatcher } = require('flux');
+// Globally load basscss into this project
+// $FlowIgnore: Flow can't find this module
+var basscss = require('basscss/css/basscss.css');
 
 var Canvas = require('./canvas.react');
 var ToolBar = require('./toolBar.react');
