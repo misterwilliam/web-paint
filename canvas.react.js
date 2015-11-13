@@ -69,6 +69,44 @@ class Grid {
   setPixel(point, value) {
     this.data[point.x][point.y] = value;
   }
+
+  isPointWithinBounds(point) {
+    if ((point.x >= 0 && point.x < this.width) &&
+         (point.x >= 0 && point.x < this.height)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  getSameColorConnectedPoints(startPoint): Array<Point2D> {
+    // Init data
+    var todo = [];
+    todo.push(startPoint);
+    var seen = [];
+    seen.push(startPoint);
+    var sameColorPoints = [];
+    var startColor = this.getPixel(startPoint);
+    // Run BFS
+    while (todo.length > 0) {
+      var currentPoint = todo.pop();
+      if (this.getPixel(currentPoint) == startColor) {
+        sameColorPoints.push(currentPoint);
+        for (var i=0; i < 2; i++) {
+          for (var j=0; j < 2; j++) {
+            if !(i == 0 && j == 0) {
+              var newPoint = new Point(startPoint.x + i, startPoint.y + j);
+              if (this.isPointWithinBounds(newPoint)) {
+                seen.push(newPoint);
+                todo.push(newPoint);
+              }
+            }
+          }
+        }
+      }
+    }
+    return sameColorPoints;
+  }
 }
 
 
@@ -104,6 +142,14 @@ var PixelGrid = React.createClass({
     this.grid.setPixel(point, false);
     var canvasPoint = PixelGridCoordToCanvasCoord(point);
     this.getCanvasContext().clearRect(canvasPoint.x, canvasPoint.y, 10, 10);
+  },
+
+  floodFill: function(point) {
+    var startColor = this.grid.getPixel(point);
+    var floodPath = this.grid.getSameColorConnectedPoints(point);
+    _.each(floodPath, (point) => {
+      this.gird.setPixel(!startColor);
+    })
   },
 
   handleClick: function(event: SyntheticEvent) {
