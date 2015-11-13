@@ -3,9 +3,11 @@
 var _ = require('underscore');
 var React = require('react');
 var ReactDOM = require('react-dom');
+var { Dispatcher } = require('flux');
 
 
 var StatusBar = require('./statusBar.react');
+var { RegisterForDispatchesMixin } = require('./utils');
 
 class Point2D {
 
@@ -66,7 +68,7 @@ class Grid {
     }
   }
 
-  setPixel(point, value) {
+  setPixel(point: Point2D, value: bool) {
     this.data[point.x][point.y] = value;
   }
 
@@ -94,8 +96,8 @@ class Grid {
         sameColorPoints.push(currentPoint);
         for (var i=0; i < 2; i++) {
           for (var j=0; j < 2; j++) {
-            if !(i == 0 && j == 0) {
-              var newPoint = new Point(startPoint.x + i, startPoint.y + j);
+            if (!(i == 0 && j == 0)) {
+              var newPoint = new Point2D(startPoint.x + i, startPoint.y + j);
               if (this.isPointWithinBounds(newPoint)) {
                 seen.push(newPoint);
                 todo.push(newPoint);
@@ -148,7 +150,7 @@ var PixelGrid = React.createClass({
     var startColor = this.grid.getPixel(point);
     var floodPath = this.grid.getSameColorConnectedPoints(point);
     _.each(floodPath, (point) => {
-      this.gird.setPixel(!startColor);
+      this.grid.setPixel(point, !startColor);
     })
   },
 
@@ -174,16 +176,43 @@ var PixelGrid = React.createClass({
 
 
 var Canvas = React.createClass({
+
+  contextTypes: {
+    dispatcher: React.PropTypes.instanceOf(Dispatcher)
+  },
+
+  mixins: [
+    RegisterForDispatchesMixin({
+      getDispatcher: function() {
+        return this.context.dispatcher;
+      },
+      handleDispatches: function(payload) {
+        this.handleDispatches(payload);
+      }
+    })
+  ],
+
+  getInitialState: function() {
+    return {
+      status: ""
+    }
+  },
+
   render: function(): ?ReactElement {
     return (
       <div className="p4">
         <h1 className="mt2">Canvas</h1>
         <PixelGrid width={50} height={50} />
-        <StatusBar />
+        <StatusBar status={this.state.status} />
       </div>
     )
   },
 
+  handleDispatches: function(payload: Object) {
+    if (payload.actionType == "status-update") {
+      this.setState({status: payload.status});
+    }
+  }
 
 });
 
