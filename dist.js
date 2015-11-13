@@ -20353,17 +20353,11 @@
 	        fileName: '../../../toolBar.react.js',
 	        lineNumber: 16
 	      }
-	    }, 'Paintbrush'), React.createElement('div', { id: 'rectangle',
+	    }, 'Paintbrush'), React.createElement('div', { id: 'floodfill',
 	      className: 'mt2 btn black bg-silver',
 	      onClick: this.handleClick, __source: {
 	        fileName: '../../../toolBar.react.js',
 	        lineNumber: 21
-	      }
-	    }, 'Rectangle'), React.createElement('div', { id: 'floodfill',
-	      className: 'mt2 btn black bg-silver',
-	      onClick: this.handleClick, __source: {
-	        fileName: '../../../toolBar.react.js',
-	        lineNumber: 26
 	      }
 	    }, 'Floodfill'));
 	  },

@@ -18,11 +18,6 @@ var ToolBar = React.createClass({
              onClick={this.handleClick} >
           Paintbrush
         </div>
-        <div id="rectangle"
-             className="mt2 btn black bg-silver"
-             onClick={this.handleClick} >
-          Rectangle
-        </div>
         <div id="floodfill"
              className="mt2 btn black bg-silver"
              onClick={this.handleClick} >
