@@ -1,7 +1,9 @@
 /* @flow */
 
+var _ = require('underscore');
 var React = require('react');
 var ReactDOM = require('react-dom');
+
 
 var StatusBar = require('./statusBar.react');
 
