@@ -20006,7 +20006,6 @@
 
 	'use strict';
 
-	var _ = __webpack_require__(163);
 	var React = __webpack_require__(1);
 	var ReactDOM = __webpack_require__(158);
 
@@ -20050,21 +20049,21 @@
 	  render: function render() {
 	    return React.createElement('div', { className: 'p4', __source: {
 	        fileName: '../../../canvas.react.js',
-	        lineNumber: 38
+	        lineNumber: 37
 	      }
 	    }, React.createElement('h1', { className: 'mt2', __source: {
 	        fileName: '../../../canvas.react.js',
-	        lineNumber: 39
+	        lineNumber: 38
 	      }
 	    }, 'Canvas'), React.createElement(PixelGrid, { ref: 'pixelGrid',
 	      width: 50, height: 50,
 	      onClick: this.handleClick, __source: {
 	        fileName: '../../../canvas.react.js',
-	        lineNumber: 40
+	        lineNumber: 39
 	      }
 	    }), React.createElement(StatusBar, { status: this.state.status, __source: {
 	        fileName: '../../../canvas.react.js',
-	        lineNumber: 43
+	        lineNumber: 42
 	      }
 	    }));
 	  },
@@ -22110,13 +22109,17 @@
 
 /***/ },
 /* 174 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var _ = __webpack_require__(163);
+	var React = __webpack_require__(1);
+	var ReactDOM = __webpack_require__(158);
 
 	var Point2D = function Point2D(x, y) {
 	  _classCallCheck(this, Point2D);
@@ -22154,7 +22157,7 @@
 	  }
 
 	  _createClass(Grid, [{
-	    key: "init",
+	    key: 'init',
 	    value: function init(width, height) {
 	      this.width = width;
 	      this.height = height;
@@ -22165,7 +22168,7 @@
 	      }
 	    }
 	  }, {
-	    key: "getPixel",
+	    key: 'getPixel',
 	    value: function getPixel(point) {
 	      var value = this.data[point.x][point.y];
 	      if (value == true) {
@@ -22175,12 +22178,12 @@
 	      }
 	    }
 	  }, {
-	    key: "setPixel",
+	    key: 'setPixel',
 	    value: function setPixel(point, value) {
 	      this.data[point.x][point.y] = value;
 	    }
 	  }, {
-	    key: "isPointWithinBounds",
+	    key: 'isPointWithinBounds',
 	    value: function isPointWithinBounds(point) {
 	      if (point.x >= 0 && point.x < this.width && point.y >= 0 && point.y < this.height) {
 	        return true;
@@ -22189,7 +22192,7 @@
 	      }
 	    }
 	  }, {
-	    key: "getSameColorConnectedPoints",
+	    key: 'getSameColorConnectedPoints',
 	    value: function getSameColorConnectedPoints(startPoint) {
 	      // Init data
 	      var todo = [];
@@ -22228,7 +22231,7 @@
 	})();
 
 	var PixelGrid = React.createClass({
-	  displayName: "PixelGrid",
+	  displayName: 'PixelGrid',
 
 	  propTypes: {
 	    width: React.PropTypes.number.isRequired,
@@ -22243,11 +22246,11 @@
 	  },
 
 	  render: function render() {
-	    return React.createElement("canvas", { ref: "canvas", className: "border", onClick: this.handleClick,
+	    return React.createElement('canvas', { ref: 'canvas', className: 'border', onClick: this.handleClick,
 	      width: this.props.width * 10,
 	      height: this.props.height * 10, __source: {
-	        fileName: "../../../pixelGrid.react.js",
-	        lineNumber: 125
+	        fileName: '../../../pixelGrid.react.js',
+	        lineNumber: 131
 	      }
 	    });
 	  },

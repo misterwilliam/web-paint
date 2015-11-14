@@ -1,9 +1,15 @@
+/* @flow */
+
+var _ = require('underscore');
+var React = require('react');
+var ReactDOM = require('react-dom');
+
 class Point2D {
 
   x: number;
   y: number;
 
-  constructor(x, y) {
+  constructor(x: number, y: number) {
     this.x = x;
     this.y = y;
   }
@@ -113,7 +119,7 @@ var PixelGrid = React.createClass({
     height: React.PropTypes.number.isRequired,
   },
 
-  grid: new Grid(),
+  grid: (new Grid(): Grid),
 
   componentDidMount: function() {
     this.grid.init(this.props.width, this.props.height);
@@ -128,23 +134,23 @@ var PixelGrid = React.createClass({
     )
   },
 
-  getPixel: function(point) {
+  getPixel: function(point: Point2D) {
     this.grid.getPixel(point);
   },
 
-  drawPixel: function(point) {
+  drawPixel: function(point: Point2D) {
     this.grid.setPixel(point, true);
     var canvasPoint = PixelGridCoordToCanvasCoord(point);
     this.getCanvasContext().fillRect(canvasPoint.x, canvasPoint.y, 10, 10);
   },
 
-  erasePixel: function(point) {
+  erasePixel: function(point: Point2D) {
     this.grid.setPixel(point, false);
     var canvasPoint = PixelGridCoordToCanvasCoord(point);
     this.getCanvasContext().clearRect(canvasPoint.x, canvasPoint.y, 10, 10);
   },
 
-  floodFill: function(point) {
+  floodFill: function(point: Point2D) {
     var startColor = this.grid.getPixel(point);
     var floodPath = this.grid.getSameColorConnectedPoints(point);
     _.each(floodPath, (point) => {
