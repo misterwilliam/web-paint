@@ -45,7 +45,7 @@ var Canvas = React.createClass({
 
   handleClick: function(point: Point2D) {
     if (this.state.status == "paintbrush") {
-      this.refs.pixelGrid.togglePixel(point);
+      this.refs.pixelGrid.drawPixel(point);
     } else if (this.state.status == "floodfill") {
       this.refs.pixelGrid.floodFill(point);
     }
@@ -53,7 +53,7 @@ var Canvas = React.createClass({
 
   handleDrag: function(point: Point2D) {
     if (this.state.status == "paintbrush") {
-      this.refs.pixelGrid.togglePixel(point);
+      this.refs.pixelGrid.drawPixel(point);
     }
   },
 

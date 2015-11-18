@@ -146,22 +146,13 @@ var PixelGrid = React.createClass({
   },
 
   getPixel: function(point: Point2D) {
-    this.grid.getPixel(point);
+    return this.grid.getPixel(point);
   },
 
   drawPixel: function(point: Point2D) {
     this.grid.setPixel(point, true);
     var canvasPoint = PixelGridCoordToCanvasCoord(point);
     this.getCanvasContext().fillRect(canvasPoint.x, canvasPoint.y, 10, 10);
-  },
-
-  togglePixel: function(point: Point2D) {
-    var value = this.getPixel(point);
-    if (value) {
-      this.erasePixel(point);
-    } else {
-      this.drawPixel(point);
-    }
   },
 
   erasePixel: function(point: Point2D) {

@@ -20415,7 +20415,7 @@
 
 	  handleClick: function handleClick(point) {
 	    if (this.state.status == "paintbrush") {
-	      this.refs.pixelGrid.togglePixel(point);
+	      this.refs.pixelGrid.drawPixel(point);
 	    } else if (this.state.status == "floodfill") {
 	      this.refs.pixelGrid.floodFill(point);
 	    }
@@ -20423,7 +20423,7 @@
 
 	  handleDrag: function handleDrag(point) {
 	    if (this.state.status == "paintbrush") {
-	      this.refs.pixelGrid.togglePixel(point);
+	      this.refs.pixelGrid.drawPixel(point);
 	    }
 	  },
 
@@ -20596,22 +20596,13 @@
 	  },
 
 	  getPixel: function getPixel(point) {
-	    this.grid.getPixel(point);
+	    return this.grid.getPixel(point);
 	  },
 
 	  drawPixel: function drawPixel(point) {
 	    this.grid.setPixel(point, true);
 	    var canvasPoint = PixelGridCoordToCanvasCoord(point);
 	    this.getCanvasContext().fillRect(canvasPoint.x, canvasPoint.y, 10, 10);
-	  },
-
-	  togglePixel: function togglePixel(point) {
-	    var value = this.getPixel(point);
-	    if (value) {
-	      this.erasePixel(point);
-	    } else {
-	      this.drawPixel(point);
-	    }
 	  },
 
 	  erasePixel: function erasePixel(point) {
