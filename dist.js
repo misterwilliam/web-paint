@@ -20405,7 +20405,8 @@
 	      }
 	    }, 'Canvas'), React.createElement(PixelGrid, { ref: 'pixelGrid',
 	      width: 50, height: 50,
-	      onClick: this.handleClick, __source: {
+	      onClick: this.handleClick,
+	      onDrag: this.handleDrag, __source: {
 	        fileName: '../../../canvas.react.js',
 	        lineNumber: 38
 	      }
@@ -20414,14 +20415,15 @@
 
 	  handleClick: function handleClick(point) {
 	    if (this.state.status == "paintbrush") {
-	      var value = this.refs.pixelGrid.grid.getPixel(point);
-	      if (value) {
-	        this.refs.pixelGrid.erasePixel(point);
-	      } else {
-	        this.refs.pixelGrid.drawPixel(point);
-	      }
+	      this.refs.pixelGrid.togglePixel(point);
 	    } else if (this.state.status == "floodfill") {
 	      this.refs.pixelGrid.floodFill(point);
+	    }
+	  },
+
+	  handleDrag: function handleDrag(point) {
+	    if (this.state.status == "paintbrush") {
+	      this.refs.pixelGrid.togglePixel(point);
 	    }
 	  },
 
@@ -20430,7 +20432,6 @@
 	      this.setState({ status: payload.status });
 	    }
 	  }
-
 	});
 
 	module.exports = Canvas;
@@ -20498,6 +20499,9 @@
 	  }, {
 	    key: 'getPixel',
 	    value: function getPixel(point) {
+	      if (!this.isPointWithinBounds(point)) {
+	        return false;
+	      }
 	      var value = this.data[point.x][point.y];
 	      if (value == true) {
 	        return true;
@@ -20508,6 +20512,9 @@
 	  }, {
 	    key: 'setPixel',
 	    value: function setPixel(point, value) {
+	      if (!this.isPointWithinBounds(point)) {
+	        return;
+	      }
 	      this.data[point.x][point.y] = value;
 	    }
 	  }, {
@@ -20567,6 +20574,7 @@
 	  },
 
 	  grid: new Grid(),
+	  isMouseDown: false,
 
 	  componentDidMount: function componentDidMount() {
 	    this.grid.init(this.props.width, this.props.height);
@@ -20574,11 +20582,15 @@
 	  },
 
 	  render: function render() {
-	    return React.createElement('canvas', { ref: 'canvas', className: 'border', onClick: this.handleClick,
+	    return React.createElement('canvas', { ref: 'canvas', className: 'border',
+	      onClick: this.handleClick,
+	      onMouseDown: this.handleMouseDown,
+	      onMouseUp: this.handleMouseUp,
+	      onMouseMove: this.handleDrag,
 	      width: this.props.width * 10,
 	      height: this.props.height * 10, __source: {
 	        fileName: '../../../pixelGrid.react.js',
-	        lineNumber: 131
+	        lineNumber: 138
 	      }
 	    });
 	  },
@@ -20591,6 +20603,15 @@
 	    this.grid.setPixel(point, true);
 	    var canvasPoint = PixelGridCoordToCanvasCoord(point);
 	    this.getCanvasContext().fillRect(canvasPoint.x, canvasPoint.y, 10, 10);
+	  },
+
+	  togglePixel: function togglePixel(point) {
+	    var value = this.getPixel(point);
+	    if (value) {
+	      this.erasePixel(point);
+	    } else {
+	      this.drawPixel(point);
+	    }
 	  },
 
 	  erasePixel: function erasePixel(point) {
@@ -20616,6 +20637,21 @@
 	  handleClick: function handleClick(event) {
 	    var point = this.getClickLocation(event);
 	    this.props.onClick(point);
+	  },
+
+	  handleMouseDown: function handleMouseDown(event) {
+	    this.isMouseDown = true;
+	  },
+
+	  handleMouseUp: function handleMouseUp(event) {
+	    this.isMouseDown = false;
+	  },
+
+	  handleDrag: function handleDrag(event) {
+	    if (this.isMouseDown) {
+	      var point = this.getClickLocation(event);
+	      this.props.onDrag(point);
+	    }
 	  },
 
 	  getClickLocation: function getClickLocation(event) {

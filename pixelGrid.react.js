@@ -56,6 +56,9 @@ class Grid {
   }
 
   getPixel(point): bool {
+    if (!this.isPointWithinBounds(point)) {
+      return false;
+    }
     var value = this.data[point.x][point.y];
     if (value == true) {
       return true;
@@ -65,6 +68,9 @@ class Grid {
   }
 
   setPixel(point: Point2D, value: bool) {
+    if (!this.isPointWithinBounds(point)) {
+      return;
+    }
     this.data[point.x][point.y] = value;
   }
 
@@ -120,6 +126,7 @@ var PixelGrid = React.createClass({
   },
 
   grid: (new Grid(): Grid),
+  isMouseDown: false,
 
   componentDidMount: function() {
     this.grid.init(this.props.width, this.props.height);
@@ -128,7 +135,11 @@ var PixelGrid = React.createClass({
 
   render: function(): ?ReactElement {
     return (
-      <canvas ref="canvas" className="border" onClick={this.handleClick}
+      <canvas ref="canvas" className="border"
+              onClick={this.handleClick}
+              onMouseDown={this.handleMouseDown}
+              onMouseUp={this.handleMouseUp}
+              onMouseMove={this.handleDrag}
               width={this.props.width * 10}
               height={this.props.height * 10} />
     )
@@ -142,6 +153,15 @@ var PixelGrid = React.createClass({
     this.grid.setPixel(point, true);
     var canvasPoint = PixelGridCoordToCanvasCoord(point);
     this.getCanvasContext().fillRect(canvasPoint.x, canvasPoint.y, 10, 10);
+  },
+
+  togglePixel: function(point: Point2D) {
+    var value = this.getPixel(point);
+    if (value) {
+      this.erasePixel(point);
+    } else {
+      this.drawPixel(point);
+    }
   },
 
   erasePixel: function(point: Point2D) {
@@ -165,6 +185,21 @@ var PixelGrid = React.createClass({
   handleClick: function(event: SyntheticEvent) {
     var point = this.getClickLocation(event);
     this.props.onClick(point);
+  },
+
+  handleMouseDown: function(event: SyntheticEvent) {
+    this.isMouseDown = true;
+  },
+
+  handleMouseUp: function(event: SyntheticEvent) {
+    this.isMouseDown = false;
+  },
+
+  handleDrag: function(event: SyntheticEvent) {
+    if (this.isMouseDown) {
+      var point = this.getClickLocation(event);
+      this.props.onDrag(point);
+    }
   },
 
   getClickLocation: function(event: SyntheticEvent): Point2D {

@@ -37,21 +37,23 @@ var Canvas = React.createClass({
         <h1 className="mt2">Canvas</h1>
         <PixelGrid ref="pixelGrid"
                    width={50} height={50}
-                   onClick={this.handleClick} />
+                   onClick={this.handleClick}
+                   onDrag={this.handleDrag} />
       </div>
     )
   },
 
   handleClick: function(point: Point2D) {
     if (this.state.status == "paintbrush") {
-      var value = this.refs.pixelGrid.grid.getPixel(point);
-      if (value) {
-        this.refs.pixelGrid.erasePixel(point);
-      } else {
-        this.refs.pixelGrid.drawPixel(point);
-      }
+      this.refs.pixelGrid.togglePixel(point);
     } else if (this.state.status == "floodfill") {
       this.refs.pixelGrid.floodFill(point);
+    }
+  },
+
+  handleDrag: function(point: Point2D) {
+    if (this.state.status == "paintbrush") {
+      this.refs.pixelGrid.togglePixel(point);
     }
   },
 
@@ -59,8 +61,7 @@ var Canvas = React.createClass({
     if (payload.actionType == "status-update") {
       this.setState({status: payload.status});
     }
-  }
-
+  },
 });
 
 module.exports = Canvas;
