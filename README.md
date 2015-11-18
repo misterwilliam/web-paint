@@ -1,6 +1,6 @@
 # web-paint
 
-An implementation of a simple pixel editor to investigate a good architecture for a real pixel editor.
+An implementation of a simple pixel editor to investigate a good architecture for a real pixel editor. Tested on Mac Chrome and Safari.
 
 [Live Demo](http://misterwilliam.github.io/web-paint/)
 
