@@ -96,24 +96,29 @@ class Grid {
       var currentPoint = todo.pop();
       if (this.getPixel(currentPoint) == startColor) {
         sameColorPoints.push(currentPoint);
-        for (var i=-1; i < 2; i++) {
-          for (var j=-1; j < 2; j++) {
-            if (!(i == 0 && j == 0)) {
-              var newPoint = new Point2D(currentPoint.x + i, currentPoint.y + j);
-              if (this.isPointWithinBounds(newPoint)) {
-                if (!_.find(seen, (point) => {
-                                    return point.x == newPoint.x && point.y == newPoint.y
-                                  })) {
-                  seen.push(newPoint);
-                  todo.push(newPoint);
-                }
-              }
+        var neighbors = this._genNeighbors(currentPoint);
+        _.each(neighbors, neighbor => {
+          if (this.isPointWithinBounds(neighbor)) {
+            if (!_.find(seen, (point) => {
+                                return point.x == neighbor.x && point.y == neighbor.y
+                              })) {
+              seen.push(neighbor);
+              todo.push(neighbor);
             }
           }
-        }
+        })
       }
     }
     return sameColorPoints;
+  }
+
+  _genNeighbors(origin: Point2D): Array<Point2D> {
+    return [
+      new Point2D(origin.x, origin.y - 1),
+      new Point2D(origin.x - 1, origin.y),
+      new Point2D(origin.x + 1, origin.y),
+      new Point2D(origin.x, origin.y + 1),
+    ];
   }
 }
 
@@ -145,7 +150,7 @@ var PixelGrid = React.createClass({
     )
   },
 
-  getPixel: function(point: Point2D) {
+  getPixel: function(point: Point2D): bool {
     return this.grid.getPixel(point);
   },
 

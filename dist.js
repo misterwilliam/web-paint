@@ -20533,6 +20533,8 @@
 	  }, {
 	    key: 'getSameColorConnectedPoints',
 	    value: function getSameColorConnectedPoints(startPoint) {
+	      var _this = this;
+
 	      // Init data
 	      var todo = [];
 	      todo.push(startPoint);
@@ -20545,24 +20547,25 @@
 	        var currentPoint = todo.pop();
 	        if (this.getPixel(currentPoint) == startColor) {
 	          sameColorPoints.push(currentPoint);
-	          for (var i = -1; i < 2; i++) {
-	            for (var j = -1; j < 2; j++) {
-	              if (!(i == 0 && j == 0)) {
-	                var newPoint = new Point2D(currentPoint.x + i, currentPoint.y + j);
-	                if (this.isPointWithinBounds(newPoint)) {
-	                  if (!_.find(seen, function (point) {
-	                    return point.x == newPoint.x && point.y == newPoint.y;
-	                  })) {
-	                    seen.push(newPoint);
-	                    todo.push(newPoint);
-	                  }
-	                }
+	          var neighbors = this._genNeighbors(currentPoint);
+	          _.each(neighbors, function (neighbor) {
+	            if (_this.isPointWithinBounds(neighbor)) {
+	              if (!_.find(seen, function (point) {
+	                return point.x == neighbor.x && point.y == neighbor.y;
+	              })) {
+	                seen.push(neighbor);
+	                todo.push(neighbor);
 	              }
 	            }
-	          }
+	          });
 	        }
 	      }
 	      return sameColorPoints;
+	    }
+	  }, {
+	    key: '_genNeighbors',
+	    value: function _genNeighbors(origin) {
+	      return [new Point2D(origin.x, origin.y - 1), new Point2D(origin.x - 1, origin.y), new Point2D(origin.x + 1, origin.y), new Point2D(origin.x, origin.y + 1)];
 	    }
 	  }]);
 
@@ -20594,7 +20597,7 @@
 	      width: this.props.width * 10,
 	      height: this.props.height * 10, __source: {
 	        fileName: '../../../pixelGrid.react.js',
-	        lineNumber: 138
+	        lineNumber: 143
 	      }
 	    });
 	  },
@@ -20616,15 +20619,15 @@
 	  },
 
 	  floodFill: function floodFill(point) {
-	    var _this = this;
+	    var _this2 = this;
 
 	    var startColor = this.grid.getPixel(point);
 	    var floodPath = this.grid.getSameColorConnectedPoints(point);
 	    _.each(floodPath, function (point) {
 	      if (startColor) {
-	        _this.erasePixel(point);
+	        _this2.erasePixel(point);
 	      } else {
-	        _this.drawPixel(point);
+	        _this2.drawPixel(point);
 	      }
 	    });
 	  },
