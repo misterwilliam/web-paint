@@ -20416,6 +20416,8 @@
 	  handleClick: function handleClick(point) {
 	    if (this.state.status == "paintbrush") {
 	      this.refs.pixelGrid.drawPixel(point);
+	    } else if (this.state.status == "eraser") {
+	      this.refs.pixelGrid.erasePixel(point);
 	    } else if (this.state.status == "floodfill") {
 	      this.refs.pixelGrid.floodFill(point);
 	    }
@@ -20424,6 +20426,8 @@
 	  handleDrag: function handleDrag(point) {
 	    if (this.state.status == "paintbrush") {
 	      this.refs.pixelGrid.drawPixel(point);
+	    } else if (this.state.status == "eraser") {
+	      this.refs.pixelGrid.erasePixel(point);
 	    }
 	  },
 
@@ -22286,12 +22290,19 @@
 	        fileName: '../../../toolBar.react.js',
 	        lineNumber: 23
 	      }
-	    }, 'Paintbrush'), React.createElement('div', { id: 'floodfill',
+	    }, 'Paintbrush'), React.createElement('div', { id: 'eraser',
+	      className: classnames("mt2", "btn", "btn-primary", "black", { "bg-silver": this.state.currentTool != "eraser",
+	        "bg-yellow": this.state.currentTool == "eraser" }),
+	      onClick: this.handleClick, __source: {
+	        fileName: '../../../toolBar.react.js',
+	        lineNumber: 30
+	      }
+	    }, 'Eraser'), React.createElement('div', { id: 'floodfill',
 	      className: classnames("mt2", "btn", "btn-primary", "black", { "bg-silver": this.state.currentTool != "floodfill",
 	        "bg-yellow": this.state.currentTool == "floodfill" }),
 	      onClick: this.handleClick, __source: {
 	        fileName: '../../../toolBar.react.js',
-	        lineNumber: 30
+	        lineNumber: 37
 	      }
 	    }, 'Floodfill'));
 	  },

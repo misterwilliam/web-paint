@@ -27,6 +27,13 @@ var ToolBar = React.createClass({
              onClick={this.handleClick} >
           Paintbrush
         </div>
+        <div id="eraser"
+             className={classnames("mt2", "btn", "btn-primary", "black",
+                                   {"bg-silver": this.state.currentTool != "eraser",
+                                    "bg-yellow": this.state.currentTool == "eraser"})}
+             onClick={this.handleClick} >
+          Eraser
+        </div>
         <div id="floodfill"
              className={classnames("mt2", "btn", "btn-primary", "black",
                                    {"bg-silver": this.state.currentTool != "floodfill",
