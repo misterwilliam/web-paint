@@ -8,7 +8,8 @@ An implementation of a simple pixel editor to investigate a good architecture fo
 * The graphics stack chosen (in this case Canvas (2D context)), determines the fundamental graphical abstractions and is a key design decision.
 * If a multi-platform (iOS, Android, and Web) solution is wanted, the only graphics stack that is available across all platforms is Open/WebGL. (This is not a full solution because the native programming language is different across platforms.)
 * Performance of rendering quickly becomes a bottleneck, it is important to be able to modify rendering algorithms with minimal disruptions to the rest of the codebase.
-* A good abstraction for a grid of pixels is a key part in solving all the problems described above.
+  * A good abstraction for a grid of pixels is a key part in solving this.
+* Third party graphics libraries should be considered. Programming directly to graphics engines provided by OS's is more work and error-prone.
 
 ## Open Questions
 * UI Elements that appear in the canvas area were not implemented (for example temporary lines to show alignment between pixels).
