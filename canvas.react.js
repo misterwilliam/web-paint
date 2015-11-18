@@ -5,7 +5,6 @@ var ReactDOM = require('react-dom');
 var { Dispatcher } = require('flux');
 
 var { PixelGrid, Point2D } = require('./pixelGrid.react');
-var StatusBar = require('./statusBar.react');
 var { RegisterForDispatchesMixin } = require('./utils');
 
 
@@ -39,7 +38,6 @@ var Canvas = React.createClass({
         <PixelGrid ref="pixelGrid"
                    width={50} height={50}
                    onClick={this.handleClick} />
-        <StatusBar status={this.state.status} />
       </div>
     )
   },

@@ -20368,8 +20368,6 @@
 	var PixelGrid = _require2.PixelGrid;
 	var Point2D = _require2.Point2D;
 
-	var StatusBar = __webpack_require__(169);
-
 	var _require3 = __webpack_require__(170);
 
 	var RegisterForDispatchesMixin = _require3.RegisterForDispatchesMixin;
@@ -20399,21 +20397,17 @@
 	  render: function render() {
 	    return React.createElement('div', { className: 'p4', __source: {
 	        fileName: '../../../canvas.react.js',
-	        lineNumber: 37
+	        lineNumber: 36
 	      }
 	    }, React.createElement('h1', { className: 'mt2', __source: {
 	        fileName: '../../../canvas.react.js',
-	        lineNumber: 38
+	        lineNumber: 37
 	      }
 	    }, 'Canvas'), React.createElement(PixelGrid, { ref: 'pixelGrid',
 	      width: 50, height: 50,
 	      onClick: this.handleClick, __source: {
 	        fileName: '../../../canvas.react.js',
-	        lineNumber: 39
-	      }
-	    }), React.createElement(StatusBar, { status: this.state.status, __source: {
-	        fileName: '../../../canvas.react.js',
-	        lineNumber: 42
+	        lineNumber: 38
 	      }
 	    }));
 	  },
@@ -22191,29 +22185,7 @@
 
 
 /***/ },
-/* 169 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var React = __webpack_require__(1);
-
-	var StatusBar = React.createClass({
-	  displayName: 'StatusBar',
-
-	  render: function render() {
-	    return React.createElement('div', {
-	      __source: {
-	        fileName: '../../../statusBar.react.js',
-	        lineNumber: 8
-	      }
-	    }, 'Current tool: ', this.props.status);
-	  }
-	});
-
-	module.exports = StatusBar;
-
-/***/ },
+/* 169 */,
 /* 170 */
 /***/ function(module, exports, __webpack_require__) {
 
