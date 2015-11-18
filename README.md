@@ -1,6 +1,7 @@
 # web-paint
 
 An implementation of a simple pixel editor to investigate a good architecture for a real pixel editor.
+
 [Demo](http://misterwilliam.github.io/web-paint/)
 
 ## Key design learnings:
